@@ -1,6 +1,10 @@
 # send-token
 
-Handles both SOL and SPL Token transfer
+Handles Sending 
+- SOL
+- SPL Token transfer 
+-   Sends to Initialized wallets
+-   Initializes SPL Token on wallets that have not been initiazed with the token
 
 References:
 - https://solanacookbook.com/recipes/token.html#transfer-token
