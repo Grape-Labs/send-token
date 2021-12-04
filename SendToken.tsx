@@ -150,22 +150,54 @@ export default function SendToken(props: any) {
             );
             
             const adjustedAmountToSend = amountToSend * Math.pow(10, decimals);
-            const transaction = new Transaction().add(
-                Token.createTransferInstruction(
-                TOKEN_PROGRAM_ID,
-                fromAta,
-                toAta,
-                publicKey,
-                [],
-                adjustedAmountToSend,
+            const receiverAccount = await connection.getAccountInfo(toAta);
+
+            if (receiverAccount === null) { // initialize token
+                const transaction = new Transaction()
+                .add(
+                    Token.createAssociatedTokenAccountInstruction(
+                        ASSOCIATED_TOKEN_PROGRAM_ID, // always ASSOCIATED_TOKEN_PROGRAM_ID
+                        TOKEN_PROGRAM_ID, // always TOKEN_PROGRAM_ID
+                        mintPubkey, // mint
+                        toAta, // ata
+                        toWallet, // owner of token account
+                        fromWallet // fee payer
+                    )
                 )
-            );
-            
-            enqueueSnackbar(`Preparing to send ${amountToSend} ${name} to ${toaddress}`,{ variant: 'info' });
-            const signature = await sendTransaction(transaction, connection);
-            enqueueSnackbar(`Transaction ready`,{ variant: 'info' });
-            await connection.confirmTransaction(signature, 'processed');
-            enqueueSnackbar(`Sent ${amountToSend} ${name} to ${toaddress}`,{ variant: 'success' });
+                .add(
+                    Token.createTransferInstruction(
+                        TOKEN_PROGRAM_ID,
+                        fromAta,
+                        toAta,
+                        publicKey,
+                        [],
+                        adjustedAmountToSend,
+                    )
+                );
+                
+                enqueueSnackbar(`Preparing to send ${amountToSend} ${name} to ${toaddress}`,{ variant: 'info' });
+                const signature = await sendTransaction(transaction, connection);
+                enqueueSnackbar(`Transaction ready`,{ variant: 'info' });
+                await connection.confirmTransaction(signature, 'processed');
+                enqueueSnackbar(`Sent ${amountToSend} ${name} to ${toaddress}`,{ variant: 'success' });
+            } else{ // token already in wallet
+                const transaction = new Transaction().add(
+                    Token.createTransferInstruction(
+                    TOKEN_PROGRAM_ID,
+                    fromAta,
+                    toAta,
+                    publicKey,
+                    [],
+                    adjustedAmountToSend,
+                    )
+                );
+                
+                enqueueSnackbar(`Preparing to send ${amountToSend} ${name} to ${toaddress}`,{ variant: 'info' });
+                const signature = await sendTransaction(transaction, connection);
+                enqueueSnackbar(`Transaction ready`,{ variant: 'info' });
+                await connection.confirmTransaction(signature, 'processed');
+                enqueueSnackbar(`Sent ${amountToSend} ${name} to ${toaddress}`,{ variant: 'success' });
+            }
         }
     }
     
@@ -174,7 +206,7 @@ export default function SendToken(props: any) {
         if (amounttosend > 0){
             if (toaddress){
                 if ((toaddress.length >= 32) && 
-                    (toaddress.length <= 44)){ // very basic check / remove and add twitter handle support (note handles not bs64)
+                    (toaddress.length <= 44)){ // very basic check / remove and add twitter handle support (handles are not bs58)
                     transferTokens(mint, toaddress, amounttosend);
                     handleClose();
                 } else{
