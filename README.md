@@ -16,6 +16,9 @@ Wallet Adapter:
 UI: 
 - Interface: MUI 5 https://mui.com
 
+Try it out (expand your the token using the arrow down on the left of the token icon to see the mint and send button):
+https://verify.grapes.network
+
 Component Preview:
 
 
