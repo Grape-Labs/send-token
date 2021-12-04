@@ -1,6 +1,6 @@
 # send-token
 
-Handles Sending
+Handles Sending of:
 - SOL
 - SPL Token transfer 
   - Sends to Initialized wallets
