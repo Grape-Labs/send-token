@@ -23,13 +23,11 @@ import {
   Typography
 } from '@mui/material';
 
-import { MakeLinkableAddress, ValidateAddress } from '../../components/Tools/WalletAddress'; // global key handling
 import { useSnackbar } from 'notistack';
 
 import HelpIcon from '@mui/icons-material/Help';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 function trimAddress(addr: string) {
