@@ -364,6 +364,7 @@ export default function SendToken(props: any) {
                         type="submit"
                         variant="outlined" 
                         title="Send"
+                        disabled={userTokenBalanceInput > balance}
                         sx={{
                             margin:1
                         }}>
