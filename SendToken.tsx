@@ -346,7 +346,6 @@ export default function SendToken(props: any) {
                                     autoComplete="off"
                                     onChange={(e) => {setToAddress(e.target.value)}}
                                     InputProps={{
-                                        // step: 0.000000001, CONSIDER USING NUMBER TYPE (hide arrows with CSS)
                                         inputProps: {
                                             style: {
                                                 textAlign:'center'
